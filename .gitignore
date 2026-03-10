@@ -190,3 +190,9 @@ artifacts/
 
 # Cake
 tools/
+**/appsettings.json
+**/bin/
+**/obj/
+*.log
+*.user
+*.vs/

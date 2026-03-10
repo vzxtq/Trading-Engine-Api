@@ -8,10 +8,6 @@ using TradingPlatform.Infrastructure.Persistence.UnitOfWork;
 
 namespace TradingPlatform.Infrastructure;
 
-/// <summary>
-/// Extension method for registering Infrastructure layer services.
-/// Configures Entity Framework Core, repositories, and Unit of Work pattern.
-/// </summary>
 public static class DependencyInjection
 {
     /// <summary>
@@ -25,16 +21,11 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        // Register DbContext with SQL Server
-        services.AddDbContext<TradingDbContext>(options =>
-         options.UseSqlServer(
-            configuration.GetConnectionString("DefaultConnection"),
-      sqlOptions => sqlOptions.MigrationsAssembly("TradingPlatform.Infrastructure")));
+        services.AddDbContext<TradingDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+            sqlOptions => sqlOptions.MigrationsAssembly("TradingPlatform.Infrastructure")));
 
-        // Register Unit of Work pattern for transaction management
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        // Register generic repository - can be used directly or through Unit of Work
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         return services;
