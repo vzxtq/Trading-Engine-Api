@@ -1,0 +1,20 @@
+using TradingPlatform.Domain.Enums;
+
+namespace TradingPlatform.Application.DTOs;
+
+/// <summary>
+/// DTO for transferring order information.
+/// </summary>
+public class OrderDto
+{
+    public Guid Id { get; set; }
+    public Guid UserId { get; set; }
+    public string Symbol { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public decimal Quantity { get; set; }
+    public decimal RemainingQuantity { get; set; }
+    public OrderSide Side { get; set; }
+    public OrderStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}

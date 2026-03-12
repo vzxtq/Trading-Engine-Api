@@ -1,4 +1,3 @@
-using TradingPlatform.Infrastructure.Persistence.Repositories;
 using TradingPlatform.Application.Interfaces;
 
 namespace TradingPlatform.Infrastructure.Persistence.UnitOfWork;
@@ -15,20 +14,6 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(TradingDbContext context)
     {
         _context = context;
-    }
-
-    public IRepository<TEntity> GetRepository<TEntity>() where TEntity : Domain.Common.BaseEntity
-    {
-        var entityType = typeof(TEntity);
-
-        if (!_repositories.ContainsKey(entityType))
-        {
-            var repositoryType = typeof(Repository<>).MakeGenericType(entityType);
-            var repositoryInstance = Activator.CreateInstance(repositoryType, _context);
-            _repositories.Add(entityType, repositoryInstance!);
-        }
-
-        return (IRepository<TEntity>)_repositories[entityType];
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

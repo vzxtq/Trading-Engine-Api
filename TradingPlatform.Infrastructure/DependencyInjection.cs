@@ -3,20 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TradingPlatform.Application.Interfaces;
 using TradingPlatform.Infrastructure.Persistence;
-using TradingPlatform.Infrastructure.Persistence.Repositories;
 using TradingPlatform.Infrastructure.Persistence.UnitOfWork;
 
 namespace TradingPlatform.Infrastructure;
 
 public static class DependencyInjection
 {
-    /// <summary>
-    /// Adds Infrastructure layer services to the dependency injection container.
-    /// Configures DbContext, repositories, and Unit of Work for data access.
-    /// </summary>
-    /// <param name="services">The service collection</param>
-    /// <param name="configuration">Application configuration for connection strings</param>
-    /// <returns>The service collection for chaining</returns>
     public static IServiceCollection AddInfrastructure(
         this IServiceCollection services,
         IConfiguration configuration)
@@ -25,8 +17,6 @@ public static class DependencyInjection
             sqlOptions => sqlOptions.MigrationsAssembly("TradingPlatform.Infrastructure")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         return services;
     }

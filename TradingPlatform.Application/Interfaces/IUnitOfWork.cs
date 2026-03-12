@@ -7,11 +7,6 @@ namespace TradingPlatform.Application.Interfaces;
 public interface IUnitOfWork : IAsyncDisposable
 {
     /// <summary>
-    /// Gets the repository for the specified entity type.
-    /// </summary>
-    IRepository<TEntity> GetRepository<TEntity>() where TEntity : Domain.Common.BaseEntity;
-
-    /// <summary>
     /// Commits all changes made in the current unit of work asynchronously.
     /// </summary>
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
