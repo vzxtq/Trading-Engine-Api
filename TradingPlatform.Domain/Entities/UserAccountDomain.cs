@@ -7,23 +7,18 @@ namespace TradingPlatform.Domain.Entities;
 /// Represents a user trading account.
 /// Aggregate root responsible for balance management.
 /// </summary>
-public class UserAccount : AggregateRoot
+public class UserAccountDomain : AggregateRoot
 {
     public string Email { get; private set; } = string.Empty;
-
     public string Name { get; private set; } = string.Empty;
-
     public Money Balance { get; private set; } = Money.Zero();
-
     public Money ReservedBalance { get; private set; } = Money.Zero();
-
     public DateTime? LastLoginAt { get; private set; }
+    public bool IsActive { get; private set; } = false;
 
-    public bool IsActive { get; private set; } = true;
+    private UserAccountDomain() { }
 
-    private UserAccount() { }
-
-    public static UserAccount Create(string email, string name, Money initialBalance)
+    public static UserAccountDomain Create(string email, string name, Money initialBalance)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentException("Email cannot be empty.", nameof(email));
@@ -34,23 +29,21 @@ public class UserAccount : AggregateRoot
         if (initialBalance.Amount < 0)
             throw new ArgumentException("Initial balance cannot be negative.", nameof(initialBalance));
 
-        return new UserAccount
+        return new UserAccountDomain
         {
             Id = Guid.NewGuid(),
             Email = email.Trim().ToLowerInvariant(),
             Name = name.Trim(),
             Balance = initialBalance,
             ReservedBalance = Money.Zero(initialBalance.Currency),
-            CreatedAt = DateTime.UtcNow,
-            IsActive = true
+            CreatedAt = DateTime.UtcNow
         };
     }
 
     /// <summary>
     /// Returns funds available for trading.
     /// </summary>
-    public Money AvailableBalance =>
-        Balance - ReservedBalance;
+    public Money AvailableBalance => Balance - ReservedBalance;
 
     /// <summary>
     /// Deposits funds into the account.

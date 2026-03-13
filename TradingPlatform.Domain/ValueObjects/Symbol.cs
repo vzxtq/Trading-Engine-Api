@@ -11,7 +11,7 @@ public class Symbol : IEquatable<Symbol>
 
     public string Value { get; private set; }
 
-    private Symbol()
+    public Symbol()
     { }
 
     public Symbol(string value)

@@ -15,11 +15,11 @@ public class MatchingEngineService
     /// Attempts to match a new order against existing orders.
     /// Returns a list of matched pairs.
     /// </summary>
-    public IReadOnlyList<(Order buyOrder, Order sellOrder, Quantity matchedQuantity)> FindMatches(
-        Order incomingOrder,
-        IEnumerable<Order> existingOrders)
+    public IReadOnlyList<(OrderDomain buyOrder, OrderDomain sellOrder, Quantity matchedQuantity)> FindMatches(
+        OrderDomain incomingOrder,
+        IEnumerable<OrderDomain> existingOrders)
     {
-        var matches = new List<(Order, Order, Quantity)>();
+        var matches = new List<(OrderDomain, OrderDomain, Quantity)>();
 
         if (incomingOrder.Symbol is null)
             return matches;
@@ -56,7 +56,7 @@ public class MatchingEngineService
     /// <summary>
     /// Determines the quantity that can be matched between two orders.
     /// </summary>
-    private static Quantity DetermineMatchQuantity(Order order1, Order order2)
+    private static Quantity DetermineMatchQuantity(OrderDomain order1, OrderDomain order2)
     {
         var quantity1 = order1.RemainingQuantity.Value;
         var quantity2 = order2.RemainingQuantity.Value;
@@ -68,7 +68,7 @@ public class MatchingEngineService
     /// <summary>
     /// Identifies which order is the buy order.
     /// </summary>
-    private static Order GetBuyOrder(Order order1, Order order2)
+    private static OrderDomain GetBuyOrder(OrderDomain order1, OrderDomain order2)
     {
         return order1.Side == OrderSide.Buy ? order1 : order2;
     }
@@ -76,7 +76,7 @@ public class MatchingEngineService
     /// <summary>
     /// Identifies which order is the sell order.
     /// </summary>
-    private static Order GetSellOrder(Order order1, Order order2)
+    private static OrderDomain GetSellOrder(OrderDomain order1, OrderDomain order2)
     {
         return order1.Side == OrderSide.Sell ? order1 : order2;
     }

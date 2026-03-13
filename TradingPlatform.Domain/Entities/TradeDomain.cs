@@ -6,7 +6,7 @@ namespace TradingPlatform.Domain.Entities;
 /// <summary>
 /// Represents an executed trade (match between a buy and sell order).
 /// </summary>
-public class Trade : BaseEntity
+public class TradeDomain : BaseEntity
 {
     public Guid BuyOrderId { get; private set; }
     public Guid SellOrderId { get; private set; }
@@ -17,13 +17,13 @@ public class Trade : BaseEntity
     public Quantity Quantity { get; private set; } = null!;
     public DateTime ExecutedAt { get; private set; }
 
-    private Trade()
+    private TradeDomain()
     { }
 
     /// <summary>
     /// Creates a new executed trade.
     /// </summary>
-    public static Trade Create(
+    public static TradeDomain Create(
         Guid buyOrderId,
         Guid sellOrderId,
         Guid buyerId,
@@ -32,7 +32,7 @@ public class Trade : BaseEntity
         Price price,
         Quantity quantity)
     {
-        return new Trade
+        return new TradeDomain
         {
             Id = Guid.NewGuid(),
             BuyOrderId = buyOrderId,

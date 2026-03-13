@@ -7,25 +7,25 @@ namespace TradingPlatform.Domain.Entities;
 /// Represents a user's position in a particular stock symbol.
 /// Tracks quantity held for a given symbol.
 /// </summary>
-public class Position : BaseEntity
+public class PositionDomain : BaseEntity
 {
     public Guid UserId { get; private set; }
     public Symbol Symbol { get; private set; } = null!;
     public Quantity Quantity { get; private set; } = null!;
     public decimal AverageCost { get; private set; }
 
-    private Position()
+    private PositionDomain()
     { }
 
     /// <summary>
     /// Creates a new position or returns null if quantity becomes zero.
     /// </summary>
-    public static Position? Create(Guid userId, Symbol symbol, Quantity quantity, decimal averageCost)
+    public static PositionDomain? Create(Guid userId, Symbol symbol, Quantity quantity, decimal averageCost)
     {
         if (quantity.Value <= 0)
             return null;
 
-        return new Position
+        return new PositionDomain
         {
             Id = Guid.NewGuid(),
             UserId = userId,

@@ -10,7 +10,7 @@ public sealed class Money : IEquatable<Money>
 
     public string Currency { get; }
 
-    private Money()
+    public Money()
     {
         Currency = "USD";
     }

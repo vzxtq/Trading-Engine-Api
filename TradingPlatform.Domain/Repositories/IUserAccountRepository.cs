@@ -7,13 +7,13 @@ namespace TradingPlatform.Domain.Repositories;
 /// </summary>
 public interface IUserAccountRepository
 {
-    Task<UserAccount?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<UserAccountDomain?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-    Task<UserAccount?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
+    Task<UserAccountDomain?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
 
-    Task AddAsync(UserAccount account, CancellationToken cancellationToken = default);
+    Task AddAsync(UserAccountDomain account, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(UserAccount account, CancellationToken cancellationToken = default);
+    Task UpdateAsync(UserAccountDomain account, CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<UserAccount>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<UserAccountDomain>> GetAllAsync(CancellationToken cancellationToken = default);
 }

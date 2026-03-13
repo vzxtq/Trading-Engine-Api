@@ -8,7 +8,7 @@ public class Quantity : IEquatable<Quantity>, IComparable<Quantity>
 {
     public decimal Value { get; private set; }
 
-    private Quantity() { }
+    public Quantity() { }
 
     public Quantity(decimal value)
     {

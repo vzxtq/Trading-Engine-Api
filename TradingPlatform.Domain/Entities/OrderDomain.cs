@@ -4,7 +4,9 @@ using TradingPlatform.Domain.Events;
 using TradingPlatform.Domain.Events.Orders;
 using TradingPlatform.Domain.ValueObjects;
 
-public class Order : AggregateRoot
+namespace TradingPlatform.Domain.Entities;
+
+public class OrderDomain : AggregateRoot
 {
     public Guid UserId { get; private set; }
     public Symbol Symbol { get; private set; } = null!;
@@ -15,16 +17,16 @@ public class Order : AggregateRoot
     public OrderSide Side { get; private set; }
     public OrderStatus Status { get; private set; }
 
-    private Order() { }
+    private OrderDomain() { }
 
-    public static Order Create(
+    public static OrderDomain Create(
         Guid userId,
         Symbol symbol,
         Price price,
         Quantity quantity,
         OrderSide side)
     {
-        var order = new Order
+        var order = new OrderDomain
         {
             Id = Guid.NewGuid(),
             UserId = userId,

@@ -1,21 +1,25 @@
+using Microsoft.EntityFrameworkCore;
 using TradingPlatform.Application;
 using TradingPlatform.Infrastructure;
+using TradingPlatform.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add core services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add application and infrastructure layers
+builder.Services.AddDbContext<TradingDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        sql => sql.MigrationsAssembly("TradingPlatform.Infrastructure")));
+
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-// Configure middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -25,5 +29,4 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-
 app.Run();
