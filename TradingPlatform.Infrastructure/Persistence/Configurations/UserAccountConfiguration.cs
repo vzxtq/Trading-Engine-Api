@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TradingPlatform.Infrastructure.Persistence;
 
 namespace TradingPlatform.Infrastructure.Persistence.Configurations;
 
@@ -55,7 +54,8 @@ public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccount>
                .HasColumnName("IsActive");
 
         builder.Property(x => x.CreatedAt)
-               .HasColumnName("CreatedAt");
+               .HasColumnName("CreatedAt")
+               .HasDefaultValueSql("SYSUTCDATETIME()");
 
         builder.Property(x => x.UpdatedAt)
                .HasColumnName("UpdatedAt");

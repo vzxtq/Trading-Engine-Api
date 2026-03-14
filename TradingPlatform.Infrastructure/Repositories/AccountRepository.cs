@@ -22,6 +22,7 @@ public class AccountRepository : IAccountRepository
         var entity = MapToEntity(account);
 
         await _dbContext.Accounts.AddAsync(entity, cancellationToken);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<UserAccountDomain?> GetByIdAsync(
@@ -33,18 +34,19 @@ public class AccountRepository : IAccountRepository
         return entity == null ? null : MapToDomain(entity);
     }
 
-    public Task UpdateAsync(
+    public async Task UpdateAsync(
         UserAccountDomain account,
         CancellationToken cancellationToken)
     {
         var entity = MapToEntity(account);
 
         _dbContext.Accounts.Update(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
 
-        return Task.CompletedTask;
+        return;
     }
 
-
+    #region Private Mapping Methods
     private static UserAccount MapToEntity(UserAccountDomain domain)
     {
         return new UserAccount
@@ -67,4 +69,5 @@ public class AccountRepository : IAccountRepository
             new Money(entity.Balance.Amount, entity.Balance.Currency)
         );
     }
+    #endregion
 }

@@ -9,14 +9,26 @@ namespace TradingPlatform.Domain.Entities;
 /// </summary>
 public class UserAccountDomain : AggregateRoot
 {
-    public string Email { get; private set; } = string.Empty;
-    public string Name { get; private set; } = string.Empty;
-    public Money Balance { get; private set; } = Money.Zero();
-    public Money ReservedBalance { get; private set; } = Money.Zero();
+    public string Email { get; private set; }
+    public string Name { get; private set; }
+    public Money Balance { get; private set; }
+    public Money ReservedBalance { get; private set; }
     public DateTime? LastLoginAt { get; private set; }
     public bool IsActive { get; private set; } = false;
 
-    private UserAccountDomain() { }
+    public UserAccountDomain(
+        Guid id,
+        string email,
+        string name,
+        Money balance,
+        Money reservedBalance)
+    {
+        Id = id;
+        Email = email;
+        Name = name;
+        Balance = balance;
+        ReservedBalance = reservedBalance;
+    }
 
     public static UserAccountDomain Create(string email, string name, Money initialBalance)
     {
@@ -29,15 +41,12 @@ public class UserAccountDomain : AggregateRoot
         if (initialBalance.Amount < 0)
             throw new ArgumentException("Initial balance cannot be negative.", nameof(initialBalance));
 
-        return new UserAccountDomain
-        {
-            Id = Guid.NewGuid(),
-            Email = email.Trim().ToLowerInvariant(),
-            Name = name.Trim(),
-            Balance = initialBalance,
-            ReservedBalance = Money.Zero(initialBalance.Currency),
-            CreatedAt = DateTime.UtcNow
-        };
+        return new UserAccountDomain(
+            Guid.NewGuid(),
+            email.Trim().ToLowerInvariant(),
+            name.Trim(),
+            initialBalance,
+            Money.Zero(initialBalance.Currency));
     }
 
     /// <summary>
