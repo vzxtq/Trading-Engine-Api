@@ -5,11 +5,11 @@ VisualStudioVersion = 17.14.36616.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingEngine.Api", "TradingEngineApi\TradingEngine.Api.csproj", "{3B02D730-3A64-4F0B-9118-962861FE9C29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingPlatform.Application", "TradingPlatform.Application\TradingPlatform.Application.csproj", "{C43F8556-9D08-4FF5-B3AD-A24F0CF2DFDD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingEngine.Application", "TradingPlatform.Application\TradingEngine.Application.csproj", "{C43F8556-9D08-4FF5-B3AD-A24F0CF2DFDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingPlatform.Infrastructure", "TradingPlatform.Infrastructure\TradingPlatform.Infrastructure.csproj", "{06C828E8-327B-47B3-9A93-C4CAD172984F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingEngine.Infrastructure", "TradingPlatform.Infrastructure\TradingEngine.Infrastructure.csproj", "{06C828E8-327B-47B3-9A93-C4CAD172984F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingPlatform.Domain", "TradingPlatform.Domain\TradingPlatform.Domain.csproj", "{33E8E674-DE59-4253-9173-90B5BE756B4F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TradingEngine.Domain", "TradingPlatform.Domain\TradingEngine.Domain.csproj", "{33E8E674-DE59-4253-9173-90B5BE756B4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

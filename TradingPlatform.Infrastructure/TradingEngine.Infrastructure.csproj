@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TradingPlatform.Application\TradingPlatform.Application.csproj" />
-    <ProjectReference Include="..\TradingPlatform.Domain\TradingPlatform.Domain.csproj" />
+    <ProjectReference Include="..\TradingPlatform.Application\TradingEngine.Application.csproj" />
+    <ProjectReference Include="..\TradingPlatform.Domain\TradingEngine.Domain.csproj" />
   </ItemGroup>
 
 </Project>
