@@ -1,6 +1,6 @@
 ﻿using TradingPlatform.Domain.Entities;
 
-namespace TradingPlatform.Application.Interfaces
+namespace TradingEngine.Application.Interfaces.Accounts
 {
     public interface IAccountRepository
     {

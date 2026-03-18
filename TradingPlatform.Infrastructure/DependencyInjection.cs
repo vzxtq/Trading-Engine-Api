@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TradingEngine.Infrastructure.Repositories.Accounts;
 using TradingPlatform.Application.Interfaces;
 using TradingPlatform.Infrastructure.Persistence;
 using TradingPlatform.Infrastructure.Persistence.UnitOfWork;
-using TradingPlatform.Infrastructure.Repositories;
 
 namespace TradingPlatform.Infrastructure;
 

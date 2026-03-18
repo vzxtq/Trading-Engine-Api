@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using TradingPlatform.Application.Interfaces;
+using TradingEngine.Application.Interfaces.Accounts;
 using TradingPlatform.Domain.Entities;
 using TradingPlatform.Domain.ValueObjects;
 using TradingPlatform.Infrastructure.Persistence;
 
-namespace TradingPlatform.Infrastructure.Repositories;
+namespace TradingEngine.Infrastructure.Repositories.Accounts;
 
 public class AccountRepository : IAccountRepository
 {

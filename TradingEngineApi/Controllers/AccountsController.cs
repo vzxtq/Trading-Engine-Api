@@ -4,6 +4,7 @@ using TradingEngineApi.Common;
 using TradingEngineApi.Extensions;
 using TradingPlatform.Application.Accounts.Commands;
 using TradingPlatform.Application.Accounts.Dtos;
+using TradingEngine.Application.Accounts.Queries;
 
 namespace TradingEngineApi.Controllers;
 
@@ -24,6 +25,14 @@ public class AccountsController : ApiController
         CancellationToken ct)
     {
         var result = await Mediator.Send(command, ct);
+        return result.ToActionResult();
+    }
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+    {
+        var query = new GetAccountByIdQuery { AccountId = id };
+        var result = await Mediator.Send(query, ct);
         return result.ToActionResult();
     }
 }
