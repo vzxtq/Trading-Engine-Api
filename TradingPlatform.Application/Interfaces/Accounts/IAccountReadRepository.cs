@@ -1,4 +1,4 @@
-﻿using TradingEngine.Application.Accounts.Dtos;
+﻿using TradingEngine.Application.Features.Accounts.Dtos;
 
 namespace TradingEngine.Application.Interfaces.Accounts
 {

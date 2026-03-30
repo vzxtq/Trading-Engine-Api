@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TradingPlatform.Application;
+using TradingEngine.Application;
 using TradingPlatform.Infrastructure;
 using TradingPlatform.Infrastructure.Persistence;
 
@@ -11,12 +11,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<TradingDbContext>(options =>
     options.UseSqlServer(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        sql => sql.MigrationsAssembly("TradingPlatform.Infrastructure")));
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+       sql => sql.MigrationsAssembly("TradingPlatform.Infrastructure")));
 
 builder.Services
     .AddApplication()
-    .AddInfrastructure(builder.Configuration);
+  .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

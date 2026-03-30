@@ -35,7 +35,7 @@ public class OrderDomain : AggregateRoot
             Quantity = quantity,
             RemainingQuantity = quantity,
             Side = side,
-            Status = OrderStatus.Pending,
+            Status = OrderStatus.Open,
             CreatedAt = DateTime.UtcNow
         };
 

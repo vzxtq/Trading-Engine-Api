@@ -1,9 +1,13 @@
-namespace TradingPlatform.Application.Common;
+using MediatR;
 
-/// <summary>
-/// Base interface for MediatR queries.
-/// </summary>
-/// <typeparam name="TResponse">The response type.</typeparam>
-public interface IQuery<out TResponse>
+namespace TradingEngine.Application.Common
 {
+    public interface IQuery<out TResponse> : IRequest<TResponse>
+    {
+    }
+
+    public interface IQueryHandler<in TQuery, TResponse> : IRequestHandler<TQuery, TResponse>
+        where TQuery : IQuery<TResponse>
+    {
+    }
 }

@@ -2,9 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TradingEngineApi.Common;
 using TradingEngineApi.Extensions;
-using TradingPlatform.Application.Accounts.Commands;
-using TradingPlatform.Application.Accounts.Dtos;
-using TradingEngine.Application.Accounts.Queries;
+using TradingEngine.Application.Features.Accounts.Commands;
+using TradingEngine.Application.Features.Accounts.Queries;
 
 namespace TradingEngineApi.Controllers;
 

@@ -11,7 +11,7 @@ public class TradingDbContext : DbContext
     {
     }
 
-    public DbSet<UserAccount> Accounts => Set<UserAccount>();
+    public DbSet<UserAccountDomain> UserAccounts => Set<UserAccountDomain>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

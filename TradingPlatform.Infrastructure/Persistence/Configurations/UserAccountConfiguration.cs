@@ -1,11 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TradingPlatform.Domain.Entities;
 
 namespace TradingPlatform.Infrastructure.Persistence.Configurations;
 
-public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccount>
+public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountDomain>
 {
-    public void Configure(EntityTypeBuilder<UserAccount> builder)
+    public void Configure(EntityTypeBuilder<UserAccountDomain> builder)
     {
         builder.ToTable("Accounts");
 

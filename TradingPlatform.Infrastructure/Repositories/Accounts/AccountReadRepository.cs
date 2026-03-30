@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using TradingEngine.Application.Accounts.Dtos;
+using TradingEngine.Application.Features.Accounts.Dtos;
 using TradingEngine.Application.Interfaces.Accounts;
 using TradingPlatform.Infrastructure.Persistence;
 
@@ -19,20 +19,22 @@ namespace TradingEngine.Infrastructure.Repositories.Accounts
 
         public async Task<AccountViewDto?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            var entity = await _dbContext.Accounts.AsNoTracking()
+            var account = await _dbContext.UserAccounts.AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
-            if (entity == null)
+            if (account == null)
                 return null;
 
             return new AccountViewDto
             {
-                Email = entity.Email,
-                Name = entity.Name,
-                Balance = entity.Balance,
-                ReservedBalance = entity.ReservedBalance,
-                LastLoginAt = entity.LastLoginAt,
-                IsActive = entity.IsActive
+                Id = account.Id,
+                Email = account.Email,
+                Name = account.Name,
+                Balance = account.Balance,
+                ReservedBalance = account.ReservedBalance,
+                LastLoginAt = account.LastLoginAt,
+                IsActive = account.IsActive,
+                CreatedAt = account.CreatedAt
             };
         }
     }
