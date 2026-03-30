@@ -1,6 +1,6 @@
 using TradingPlatform.Domain.Enums;
 
-namespace TradingPlatform.Application.DTOs;
+namespace TradingEngine.Application.Features.Orders.Dtos;
 
 /// <summary>
 /// DTO for transferring order information.

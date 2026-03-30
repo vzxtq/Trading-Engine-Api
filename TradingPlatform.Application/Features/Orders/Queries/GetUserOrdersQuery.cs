@@ -1,7 +1,7 @@
 using TradingEngine.Application.Common;
+using TradingEngine.Application.Features.Orders.Dtos;
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Application.Interfaces.Orders;
-using TradingPlatform.Application.DTOs;
 
 namespace TradingEngine.Application.Features.Orders.Queries;
 
