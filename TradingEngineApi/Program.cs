@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TradingEngine.Application;
+using TradingEngine.Infrastructure.Persistence;
 using TradingPlatform.Infrastructure;
-using TradingPlatform.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 

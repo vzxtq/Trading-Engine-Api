@@ -1,11 +1,11 @@
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Application.Interfaces.Orders;
+using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.Enums;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
 using TradingPlatform.Application.Common;
 using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.Entities;
-using TradingPlatform.Domain.Enums;
 using TradingPlatform.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Commands;
@@ -13,7 +13,7 @@ namespace TradingEngine.Application.Features.Orders.Commands;
 /// <summary>
 /// Command to place a new order in the system.
 /// </summary>
-public class PlaceOrderCommand : ICommand<PlaceOrderResponseDto>
+public class PlaceOrderCommand : ICommand<Result<PlaceOrderResponseDto>>
 {
     public Guid UserId { get; set; }
     public string Symbol { get; set; } = string.Empty;
@@ -22,7 +22,7 @@ public class PlaceOrderCommand : ICommand<PlaceOrderResponseDto>
     public OrderSide Side { get; set; }
 }
 
-public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand, PlaceOrderResponseDto>
+public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand, Result<PlaceOrderResponseDto>>
 {
     private readonly IMatchingEngineQueue _queue;
     private readonly IOrderRepository _orderRepository;
@@ -35,7 +35,7 @@ public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand
         _orderRepository = orderRepository;
     }
 
-    public async Task<PlaceOrderResponseDto> Handle(
+    public async Task<Result<PlaceOrderResponseDto>> Handle(
         PlaceOrderCommand request,
         CancellationToken cancellationToken)
     {
@@ -69,21 +69,17 @@ public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand
 
             await _queue.EnqueueAsync(command, cancellationToken);
 
-            return new PlaceOrderResponseDto
+            return Result<PlaceOrderResponseDto>.Success(new PlaceOrderResponseDto
             {
                 OrderId = order.Id,
                 Status = OrderStatus.Open,
                 Message = "Order queued for matching"
-            };
+            });
         }
         catch (Exception ex)
         {
-            return new PlaceOrderResponseDto
-            {
-                OrderId = orderId,
-                Status = OrderStatus.Rejected,
-                Message = $"Failed to place order: {ex.Message}"
-            };
+            return Result<PlaceOrderResponseDto>.Failure(
+                $"Failed to place order: {ex.Message}");
         }
     }
 }

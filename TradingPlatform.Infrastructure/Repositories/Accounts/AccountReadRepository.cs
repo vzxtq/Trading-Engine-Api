@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TradingEngine.Application.Features.Accounts.Dtos;
 using TradingEngine.Application.Interfaces.Accounts;
-using TradingPlatform.Infrastructure.Persistence;
+using TradingEngine.Infrastructure.Persistence;
 
 namespace TradingEngine.Infrastructure.Repositories.Accounts
 {

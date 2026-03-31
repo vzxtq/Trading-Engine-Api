@@ -1,19 +1,19 @@
-using TradingEngine.Application.Features.Orders.Repositories;
-using TradingEngine.Application.Interfaces.Orders;
 using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Orders.Dtos;
-
+using TradingEngine.Application.Features.Orders.Repositories;
+using TradingEngine.Application.Interfaces.Orders;
+using TradingPlatform.Application.Common;
 namespace TradingEngine.Application.Features.Orders.Queries;
 
 /// <summary>
 /// Query to retrieve an order by its ID.
 /// </summary>
-public class GetOrderByIdQuery : IQuery<OrderDto?>
+public class GetOrderByIdQuery : IQuery<Result<OrderDto>>
 {
    public Guid OrderId { get; set; }
 }
 
-public class GetOrderByIdQueryHandler : IQueryHandler<GetOrderByIdQuery, OrderDto?>
+public class GetOrderByIdQueryHandler : IQueryHandler<GetOrderByIdQuery, Result<OrderDto>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -22,12 +22,12 @@ public class GetOrderByIdQueryHandler : IQueryHandler<GetOrderByIdQuery, OrderDt
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<OrderDto?> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<OrderDto>> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
     {
         var order = await _orderRepository.GetByIdAsync(request.OrderId, cancellationToken);
-        if (order is null) return null;
+        if (order is null) return Result<OrderDto>.Failure("Order not found");
 
-        return new OrderDto
+        return Result<OrderDto>.Success(new OrderDto
         {
             Id = order.Id,
             UserId = order.UserId,
@@ -39,6 +39,6 @@ public class GetOrderByIdQueryHandler : IQueryHandler<GetOrderByIdQuery, OrderDt
             Status = order.Status,
             CreatedAt = order.CreatedAt,
             UpdatedAt = order.UpdatedAt
-        };
+        });
     }
 }

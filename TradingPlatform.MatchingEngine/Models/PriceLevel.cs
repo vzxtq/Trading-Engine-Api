@@ -1,11 +1,14 @@
 namespace TradingEngine.MatchingEngine.Models;
 
-public class PriceLevel
+public sealed class PriceLevel
 {
-    private readonly Queue<EngineOrder> _orders = new();
+    private readonly LinkedList<EngineOrder> _orders = new();
+    private readonly Dictionary<Guid, LinkedListNode<EngineOrder>> _nodeMap = new();
 
     public long Price { get; }
-    public IReadOnlyList<EngineOrder> Orders => _orders.ToList().AsReadOnly();
+    public bool HasOrders => _orders.Count > 0;
+    public IEnumerable<EngineOrder> Orders => _orders;
+
     public long TotalQuantity => _orders.Sum(o => o.RemainingQuantity);
 
     public PriceLevel(long price)
@@ -16,28 +19,19 @@ public class PriceLevel
 
     public void AddOrder(EngineOrder order)
     {
-        _orders.Enqueue(order);
+        var node = _orders.AddLast(order);
+        _nodeMap[order.Id] = node;
     }
 
     public bool RemoveOrder(Guid orderId)
     {
-        var count = _orders.Count;
-        var temp = new List<EngineOrder>();
+        if (!_nodeMap.TryGetValue(orderId, out var node))
+            return false;
 
-        while (_orders.Count > 0)
-        {
-            var order = _orders.Dequeue();
-            if (order.Id != orderId)
-                temp.Add(order);
-        }
-
-        foreach (var order in temp)
-            _orders.Enqueue(order);
-
-        return _orders.Count < count;
+        _orders.Remove(node);
+        _nodeMap.Remove(orderId);
+        return true;
     }
 
-    public bool HasOrders => _orders.Count > 0;
-
-    public EngineOrder? PeekOrder() => _orders.Count > 0 ? _orders.Peek() : null;
+    public EngineOrder? PeekOrder() => _orders.First?.Value;
 }

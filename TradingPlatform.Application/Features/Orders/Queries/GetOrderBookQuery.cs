@@ -1,16 +1,17 @@
 using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Orders.Repositories;
+using TradingPlatform.Application.Common;
 using TradingPlatform.Application.Features.Orders.Dtos;
 using TradingPlatform.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Queries;
 
-public class GetOrderBookQuery : IQuery<OrderBookDto>
+public class GetOrderBookQuery : IQuery<Result<OrderBookDto>>
 {
     public string Symbol { get; set; } = string.Empty;
 }
 
-public sealed class GetOrderBookQueryHandler : IQueryHandler<GetOrderBookQuery, OrderBookDto>
+public sealed class GetOrderBookQueryHandler : IQueryHandler<GetOrderBookQuery, Result<OrderBookDto>>
 {
     private readonly IOrderBookReadRepository _readRepository;
 
@@ -19,9 +20,10 @@ public sealed class GetOrderBookQueryHandler : IQueryHandler<GetOrderBookQuery, 
         _readRepository = readRepository;
     }
 
-    public async Task<OrderBookDto> Handle(GetOrderBookQuery request, CancellationToken cancellationToken)
+    public async Task<Result<OrderBookDto>> Handle(GetOrderBookQuery request, CancellationToken cancellationToken)
     {
         var symbol = new Symbol(request.Symbol);
-        return await _readRepository.GetOrderBookAsync(symbol, cancellationToken);
+        var book = await _readRepository.GetOrderBookAsync(symbol, cancellationToken);
+        return Result<OrderBookDto>.Success(book);
     }
 }

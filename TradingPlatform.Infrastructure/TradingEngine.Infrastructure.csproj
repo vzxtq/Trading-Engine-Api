@@ -22,8 +22,4 @@
     <ProjectReference Include="..\TradingPlatform.Domain\TradingEngine.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Persistence\UnitOfWork\" />
-  </ItemGroup>
-
 </Project>

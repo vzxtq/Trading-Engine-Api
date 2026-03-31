@@ -1,10 +1,10 @@
-using TradingPlatform.Domain.Enums;
+using TradingEngine.Domain.Enums;
 
 namespace TradingPlatform.Application.Features.Orders.Dtos;
 
 public class PlaceOrderResponseDto
 {
-    public Guid OrderId { get; set; }
-    public OrderStatus Status { get; set; }
-    public string Message { get; set; } = string.Empty;
+    public Guid OrderId { get; init; }
+    public OrderStatus Status { get; init; }
+    public string Message { get; init; } = string.Empty;
 }

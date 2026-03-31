@@ -1,4 +1,4 @@
-using TradingPlatform.Domain.Entities;
+using TradingEngine.Domain.Entities;
 
 namespace TradingEngine.Application.Interfaces.Orders;
 

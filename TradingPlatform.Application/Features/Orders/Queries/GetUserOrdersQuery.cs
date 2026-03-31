@@ -2,16 +2,17 @@ using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Orders.Dtos;
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Application.Interfaces.Orders;
+using TradingPlatform.Application.Common;
 
 namespace TradingEngine.Application.Features.Orders.Queries;
 
 
-public class GetUserOrdersQuery : IQuery<IReadOnlyList<OrderDto>>
+public class GetUserOrdersQuery : IQuery<Result<IReadOnlyList<OrderDto>>>
 {
     public Guid UserId { get; set; }
 }
 
-public sealed class GetUserOrdersQueryHandler : IQueryHandler<GetUserOrdersQuery, IReadOnlyList<OrderDto>>
+public sealed class GetUserOrdersQueryHandler : IQueryHandler<GetUserOrdersQuery, Result<IReadOnlyList<OrderDto>>>
 {
     private readonly IOrderRepository _orderRepository;
 
@@ -20,11 +21,11 @@ public sealed class GetUserOrdersQueryHandler : IQueryHandler<GetUserOrdersQuery
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
     }
 
-    public async Task<IReadOnlyList<OrderDto>> Handle(GetUserOrdersQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IReadOnlyList<OrderDto>>> Handle(GetUserOrdersQuery request, CancellationToken cancellationToken)
     {
         var orders = await _orderRepository.GetUserOrdersAsync(request.UserId, cancellationToken);
 
-        return orders
+        var dtos = orders
             .Select(order => new OrderDto
             {
                 Id = order.Id,
@@ -39,5 +40,7 @@ public sealed class GetUserOrdersQueryHandler : IQueryHandler<GetUserOrdersQuery
                 UpdatedAt = order.UpdatedAt
             })
             .ToList();
+
+        return Result<IReadOnlyList<OrderDto>>.Success(dtos);
     }
 }

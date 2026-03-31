@@ -1,10 +1,8 @@
-namespace TradingPlatform.Domain.Enums;
-
-/// <summary>
-/// Represents the side of an order (Buy or Sell).
-/// </summary>
-public enum OrderSide
+namespace TradingEngine.Domain.Enums
 {
-    Buy = 1,
-    Sell = 2
+    public enum OrderSide
+    {
+        Buy = 1,
+        Sell = 2
+    }
 }

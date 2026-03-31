@@ -32,6 +32,7 @@ public class AccountsController : ApiController
     {
         var query = new GetAccountByIdQuery { AccountId = id };
         var result = await Mediator.Send(query, ct);
+
         return result.ToActionResult();
     }
 }

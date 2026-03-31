@@ -1,10 +1,8 @@
 using TradingEngine.Application.Features.Orders.Repositories;
-using TradingEngine.Application.Interfaces.Orders;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
 using TradingPlatform.Application.Common;
 using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.Enums;
 using TradingPlatform.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Commands;
@@ -12,13 +10,13 @@ namespace TradingEngine.Application.Features.Orders.Commands;
 /// <summary>
 /// Command to cancel an existing order.
 /// </summary>
-public class CancelOrderCommand : ICommand<CancelOrderResponseDto>
+public class CancelOrderCommand : ICommand<Result<CancelOrderResponseDto>>
 {
     public Guid OrderId { get; set; }
     public Guid UserId { get; set; }
 }
 
-public sealed class CancelOrderCommandHandler : ICommandHandler<CancelOrderCommand, CancelOrderResponseDto>
+public sealed class CancelOrderCommandHandler : ICommandHandler<CancelOrderCommand, Result<CancelOrderResponseDto>>
 {
     private readonly IOrderRepository _orderRepository;
     private readonly IMatchingEngineQueue _engineQueue;
@@ -31,29 +29,19 @@ public sealed class CancelOrderCommandHandler : ICommandHandler<CancelOrderComma
         _engineQueue = engineQueue ?? throw new ArgumentNullException(nameof(engineQueue));
     }
 
-    public async Task<CancelOrderResponseDto> Handle(
+    public async Task<Result<CancelOrderResponseDto>> Handle(
         CancelOrderCommand request,
         CancellationToken cancellationToken)
     {
         var order = await _orderRepository.GetByIdAsync(request.OrderId, cancellationToken);
         if (order is null)
         {
-            return new CancelOrderResponseDto
-            {
-                OrderId = request.OrderId,
-                Success = false,
-                Message = "Order not found"
-            };
+            return Result<CancelOrderResponseDto>.Failure("Order not found");
         }
 
         if (order.UserId != request.UserId)
         {
-            return new CancelOrderResponseDto
-            {
-                OrderId = request.OrderId,
-                Success = false,
-                Message = "Order does not belong to user"
-            };
+            return Result<CancelOrderResponseDto>.Failure("Order does not belong to user");
         }
 
         // Update domain state
@@ -69,11 +57,11 @@ public sealed class CancelOrderCommandHandler : ICommandHandler<CancelOrderComma
 
         await _engineQueue.EnqueueAsync(cancelCommand, cancellationToken);
 
-        return new CancelOrderResponseDto
+        return Result<CancelOrderResponseDto>.Success(new CancelOrderResponseDto
         {
             OrderId = order.Id,
             Success = true,
             Message = "Cancel request accepted"
-        };
+        });
     }
 }
