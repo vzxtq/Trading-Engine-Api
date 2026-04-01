@@ -1,18 +1,19 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using TradingEngine.MatchingEngine.Services;
 
 namespace TradingEngine.MatchingEngine.Services.Background;
 
 public sealed class MatchingEngineBackgroundService : BackgroundService
 {
-    private readonly MatchingEngineWorker _worker;
+    private readonly MatchingEngineHost _host;
     private readonly ILogger<MatchingEngineBackgroundService> _logger;
 
     public MatchingEngineBackgroundService(
-        MatchingEngineWorker worker,
+        MatchingEngineHost host,
         ILogger<MatchingEngineBackgroundService> logger)
     {
-        _worker = worker;
+        _host = host;
         _logger = logger;
     }
 
@@ -21,7 +22,7 @@ public sealed class MatchingEngineBackgroundService : BackgroundService
         _logger.LogInformation("Matching Engine starting");
         try
         {
-            await _worker.RunAsync(stoppingToken);
+            await _host.RunAsync(stoppingToken);
         }
         catch (Exception ex)
         {

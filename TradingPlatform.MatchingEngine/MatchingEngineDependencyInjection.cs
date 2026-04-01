@@ -1,7 +1,5 @@
-using System.Threading.Channels;
 using Microsoft.Extensions.DependencyInjection;
 using TradingEngine.MatchingEngine.Abstractions;
-using TradingEngine.MatchingEngine.Commands;
 using TradingEngine.MatchingEngine.Services;
 using TradingEngine.MatchingEngine.Services.Background;
 
@@ -9,23 +7,28 @@ namespace TradingEngine.MatchingEngine;
 
 public static class MatchingEngineDependencyInjection
 {
-    private const int ChannelCapacity = 1000;
-
-    public static MatchingEngineBuilder AddMatchingEngine(this IServiceCollection services)
+    public static MatchingEngineBuilder AddMatchingEngine(
+        this IServiceCollection services,
+        Action<MatchingEngineOptions>? configure = null)
     {
-        var channel = Channel.CreateBounded<MatchingEngineCommand>(new BoundedChannelOptions(ChannelCapacity)
-        {
-            SingleReader = true,
-            SingleWriter = false,
-            FullMode = BoundedChannelFullMode.Wait
-        });
+        var defaults = new MatchingEngineOptions();
 
-        services.AddSingleton(channel.Reader);
-        services.AddSingleton<IMatchingEngineQueue>(_ => new MatchingEngineQueue(channel.Writer));
-        services.AddSingleton<MatchingEngineProcessor>();
+        services.AddOptions<MatchingEngineOptions>()
+            .Configure(options =>
+            {
+                options.ChannelCapacity = defaults.ChannelCapacity;
+                options.ShardCount = defaults.ShardCount;
+                options.FullMode = defaults.FullMode;
+            });
+
+        if (configure is not null)
+            services.Configure(configure);
+
         services.AddSingleton<IEngineTimeProvider, StopwatchEngineTimeProvider>();
         services.AddSingleton<IExecutionResultDispatcher, ExecutionResultDispatcher>();
-        services.AddSingleton<MatchingEngineWorker>();
+        services.AddSingleton<MatchingEngineHost>();
+        services.AddSingleton<IMatchingEngineQueue>(sp => sp.GetRequiredService<MatchingEngineHost>());
+        services.AddSingleton<IOrderBookSnapshotProvider>(sp => sp.GetRequiredService<MatchingEngineHost>());
         services.AddHostedService<MatchingEngineBackgroundService>();
 
         return new MatchingEngineBuilder(services);

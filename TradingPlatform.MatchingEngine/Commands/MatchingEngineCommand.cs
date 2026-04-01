@@ -1,4 +1,6 @@
+using System.Threading.Tasks;
 using TradingEngine.Domain.Enums;
+using TradingEngine.MatchingEngine.Models;
 using TradingPlatform.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Commands;
@@ -24,4 +26,13 @@ public sealed record AddOrderCommand : MatchingEngineCommand
 public sealed record CancelOrderCommand : MatchingEngineCommand
 {
     public required Guid OrderId { get; init; }
+}
+
+/// <summary>
+/// Internal command to capture a consistent snapshot of an order book.
+/// Processed inside the shard worker thread to avoid locking.
+/// </summary>
+public sealed record SnapshotOrderBookCommand : MatchingEngineCommand
+{
+    public required TaskCompletionSource<OrderBookSnapshot> Completion { get; init; }
 }

@@ -158,4 +158,6 @@ public sealed class SymbolEngine
             ? taker.Price >= maker.Price
             : taker.Price <= maker.Price;
     }
+
+    public OrderBookSnapshot Snapshot() => _orderBook.Snapshot();
 }

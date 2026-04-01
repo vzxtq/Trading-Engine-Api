@@ -39,9 +39,19 @@ public sealed class MatchingEngineWorker
     {
         try
         {
-            var engineTimestamp = _timeProvider.GetTimestamp();
-            var result = _engine.Process(command, engineTimestamp);
-            await _dispatcher.DispatchAsync(result, ct);
+            switch (command)
+            {
+                case SnapshotOrderBookCommand snapshot:
+                    var view = _engine.GetSnapshot(snapshot.Symbol);
+                    snapshot.Completion.TrySetResult(view);
+                    break;
+
+                default:
+                    var engineTimestamp = _timeProvider.GetTimestamp();
+                    var result = _engine.Process(command, engineTimestamp);
+                    await _dispatcher.DispatchAsync(result, ct);
+                    break;
+            }
         }
         catch (Exception ex)
         {

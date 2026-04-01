@@ -1,4 +1,6 @@
+using System.Linq;
 using TradingEngine.Domain.Enums;
+using TradingEngine.MatchingEngine.Models;
 
 namespace TradingEngine.MatchingEngine.Models;
 
@@ -77,6 +79,42 @@ public class OrderBook
     public EngineOrder? FindOrder(Guid orderId)
     {
         return _orderMap.TryGetValue(orderId, out var orderInfo) ? orderInfo.Order : null;
+    }
+
+    public OrderBookSnapshot Snapshot()
+    {
+        var bids = SnapshotSide(_bidLevels, OrderSide.Buy);
+        var asks = SnapshotSide(_askLevels, OrderSide.Sell);
+        return new OrderBookSnapshot(Symbol, bids, asks);
+    }
+
+    private static IReadOnlyList<PriceLevelSnapshot> SnapshotSide(
+        SortedDictionary<long, PriceLevel> levels,
+        OrderSide side)
+    {
+        var snapshots = new List<PriceLevelSnapshot>(levels.Count);
+
+        foreach (var level in levels.Values)
+        {
+            var orders = level.Orders
+                .Select(o => new OrderBookOrderSnapshot(
+                    o.Id,
+                    o.UserId,
+                    o.Price,
+                    o.OriginalQuantity,
+                    o.FilledQuantity,
+                    o.RemainingQuantity,
+                    side,
+                    o.CreatedAt))
+                .ToList();
+
+            snapshots.Add(new PriceLevelSnapshot(
+                level.Price,
+                level.TotalQuantity,
+                orders));
+        }
+
+        return snapshots;
     }
 
     private sealed class DescComparer : IComparer<long>
