@@ -1,5 +1,5 @@
 using TradingEngine.Domain.Enums;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Models;
 

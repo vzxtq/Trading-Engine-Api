@@ -1,7 +1,7 @@
-using TradingPlatform.Domain.Common;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.Common;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Domain.Entities;
+namespace TradingEngine.Domain.Entities;
 
 /// <summary>
 /// Represents an executed trade (match between a buy and sell order).
@@ -44,6 +44,32 @@ public class TradeDomain : BaseEntity
             Quantity = quantity,
             ExecutedAt = DateTime.UtcNow,
             CreatedAt = DateTime.UtcNow
+        };
+    }
+
+    public static TradeDomain Create(
+        Guid tradeId,
+        Guid buyOrderId,
+        Guid sellOrderId,
+        Guid buyerId,
+        Guid sellerId,
+        Symbol symbol,
+        Price price,
+        Quantity quantity,
+        DateTime executedAtUtc)
+    {
+        return new TradeDomain
+        {
+            Id = tradeId,
+            BuyOrderId = buyOrderId,
+            SellOrderId = sellOrderId,
+            BuyerId = buyerId,
+            SellerId = sellerId,
+            Symbol = symbol,
+            Price = price,
+            Quantity = quantity,
+            ExecutedAt = executedAtUtc,
+            CreatedAt = executedAtUtc
         };
     }
 

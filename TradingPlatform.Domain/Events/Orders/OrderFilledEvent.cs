@@ -1,7 +1,7 @@
-﻿using TradingPlatform.Domain.Common;
-using TradingPlatform.Domain.ValueObjects;
+﻿using TradingEngine.Domain.Common;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Domain.Events.Orders;
+namespace TradingEngine.Domain.Events.Orders;
 
 public class OrderFilledEvent : DomainEvent
 {

@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TradingPlatform.Domain.Entities;
+using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Infrastructure.Persistence.Configurations;
+namespace TradingEngine.Infrastructure.Persistence.Configurations;
 
 public sealed class TradeConfiguration : IEntityTypeConfiguration<TradeDomain>
 {
@@ -21,29 +22,25 @@ public sealed class TradeConfiguration : IEntityTypeConfiguration<TradeDomain>
         builder.Property(t => t.BuyerId).IsRequired();
         builder.Property(t => t.SellerId).IsRequired();
 
-        builder.OwnsOne(t => t.Symbol, sym =>
-        {
-            sym.Property(s => s.Value)
+        builder.Property(t => t.Symbol)
+               .HasConversion(
+                   v => v.Value,
+                   v => new Symbol(v))
                .HasColumnName("Symbol")
                .HasMaxLength(10)
                .IsRequired();
-        });
 
-        builder.OwnsOne(t => t.Price, price =>
-        {
-            price.Property(p => p.Value)
-                 .HasColumnName("Price")
-                 .HasPrecision(18, 8)
-                 .IsRequired();
-        });
+        builder.Property(t => t.Price)
+               .HasConversion(v => v.Value, v => new Price(v))
+               .HasColumnName("Price")
+               .HasPrecision(18, 8)
+               .IsRequired();
 
-        builder.OwnsOne(t => t.Quantity, qty =>
-        {
-            qty.Property(q => q.Value)
+        builder.Property(t => t.Quantity)
+               .HasConversion(v => v.Value, v => new Quantity(v))
                .HasColumnName("Quantity")
                .HasPrecision(18, 8)
                .IsRequired();
-        });
 
         builder.Property(t => t.ExecutedAt)
                .HasColumnName("ExecutedAt")

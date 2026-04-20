@@ -1,7 +1,7 @@
-using TradingPlatform.Domain.Common;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.Common;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Domain.Entities;
+namespace TradingEngine.Domain.Entities;
 
 /// <summary>
 /// Represents a user trading account.
@@ -10,33 +10,43 @@ namespace TradingPlatform.Domain.Entities;
 public class UserAccountDomain : AggregateRoot
 {
     public string Email { get; private set; }
-    public string Name { get; private set; }
+    public string FirstName { get; private set; }
+    public string LastName { get; private set; }
+    public string FullName => $"{FirstName} {LastName}".Trim();
     public Money Balance { get; private set; }
     public Money ReservedBalance { get; private set; }
     public DateTime? LastLoginAt { get; private set; }
     public bool IsActive { get; private set; } = false;
 
+    private UserAccountDomain()
+    { }
+
     public UserAccountDomain(
         Guid id,
         string email,
-        string name,
+        string firstName,
+        string lastName,
         Money balance,
         Money reservedBalance)
     {
         Id = id;
         Email = email;
-        Name = name;
+        FirstName = firstName;
+        LastName = lastName;
         Balance = balance;
         ReservedBalance = reservedBalance;
     }
 
-    public static UserAccountDomain Create(string email, string name, Money initialBalance)
+    public static UserAccountDomain Create(string email, string firstName, string lastName, Money initialBalance)
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new ArgumentException("Email cannot be empty.", nameof(email));
 
-        if (string.IsNullOrWhiteSpace(name))
-            throw new ArgumentException("Name cannot be empty.", nameof(name));
+        if (string.IsNullOrWhiteSpace(firstName))
+            throw new ArgumentException("First name cannot be empty.", nameof(firstName));
+
+        if (string.IsNullOrWhiteSpace(lastName))
+            throw new ArgumentException("Last name cannot be empty.", nameof(lastName));
 
         if (initialBalance.Amount < 0)
             throw new ArgumentException("Initial balance cannot be negative.", nameof(initialBalance));
@@ -44,9 +54,14 @@ public class UserAccountDomain : AggregateRoot
         return new UserAccountDomain(
             Guid.NewGuid(),
             email.Trim().ToLowerInvariant(),
-            name.Trim(),
+            firstName.Trim(),
+            lastName.Trim(),
             initialBalance,
-            Money.Zero(initialBalance.Currency));
+            Money.Zero(initialBalance.Currency))
+        {
+            IsActive = true,
+            CreatedAt = DateTime.UtcNow
+        };
     }
 
     /// <summary>

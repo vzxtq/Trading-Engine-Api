@@ -1,5 +1,5 @@
 using TradingEngine.MatchingEngine.Models;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Abstractions;
 

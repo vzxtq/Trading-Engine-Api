@@ -1,9 +1,11 @@
+using System.Text.Json.Serialization;
 using TradingEngine.Application.Features.Orders.Repositories;
+using TradingEngine.Application.Interfaces.Orders;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
-using TradingPlatform.Application.Common;
-using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Application.Common;
+using TradingEngine.Application.Features.Orders.Dtos;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Commands;
 
@@ -13,6 +15,7 @@ namespace TradingEngine.Application.Features.Orders.Commands;
 public class CancelOrderCommand : ICommand<Result<CancelOrderResponseDto>>
 {
     public Guid OrderId { get; set; }
+    [JsonIgnore]
     public Guid UserId { get; set; }
 }
 

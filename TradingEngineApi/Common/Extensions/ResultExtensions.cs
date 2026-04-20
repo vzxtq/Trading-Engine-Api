@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TradingEngineApi.Common;
-using TradingPlatform.Application.Common;
+using TradingEngine.Application.Common;
 
 namespace TradingEngineApi.Extensions;
 

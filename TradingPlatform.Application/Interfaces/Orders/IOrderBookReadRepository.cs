@@ -1,5 +1,5 @@
-using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Application.Features.Orders.Dtos;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Repositories;
 

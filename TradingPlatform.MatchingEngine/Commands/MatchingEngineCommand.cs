@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using TradingEngine.Domain.Enums;
 using TradingEngine.MatchingEngine.Models;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Commands;
 

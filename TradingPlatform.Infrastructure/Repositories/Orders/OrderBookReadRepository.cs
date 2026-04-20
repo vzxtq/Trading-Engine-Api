@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using TradingEngine.Application.Features.Orders.Dtos;
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Infrastructure.Persistence;
-using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Application.DTOs;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Application.Features.Orders.Dtos;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Infrastructure.Repositories.Orders;
 
@@ -23,14 +23,14 @@ public sealed class OrderBookReadRepository : IOrderBookReadRepository
             .Where(o => o.Symbol.Value == symbol.Value && o.Side == Domain.Enums.OrderSide.Buy)
             .OrderByDescending(o => o.Price.Value)
             .ThenBy(o => o.CreatedAt)
-            .Select(MapOrder)
+            .Select(o => MapOrder(o))
             .ToListAsync(cancellationToken);
 
         var sellOrders = await _dbContext.Orders
             .Where(o => o.Symbol.Value == symbol.Value && o.Side == Domain.Enums.OrderSide.Sell)
             .OrderBy(o => o.Price.Value)
             .ThenBy(o => o.CreatedAt)
-            .Select(MapOrder)
+            .Select(o => MapOrder(o))
             .ToListAsync(cancellationToken);
 
         return new OrderBookDto

@@ -1,8 +1,8 @@
 using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Orders.Repositories;
-using TradingPlatform.Application.Common;
-using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Application.Common;
+using TradingEngine.Application.Features.Orders.Dtos;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Orders.Queries;
 

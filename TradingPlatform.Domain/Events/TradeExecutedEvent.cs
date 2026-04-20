@@ -1,4 +1,4 @@
-namespace TradingPlatform.Domain.Events;
+namespace TradingEngine.Domain.Events;
 
 /// <summary>
 /// Raised when a trade (match between buy and sell orders) has been executed.

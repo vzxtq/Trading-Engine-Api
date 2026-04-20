@@ -1,8 +1,8 @@
 using TradingEngine.Domain.Enums;
-using TradingPlatform.Domain.Common;
-using TradingPlatform.Domain.Events;
-using TradingPlatform.Domain.Events.Orders;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.Common;
+using TradingEngine.Domain.Events;
+using TradingEngine.Domain.Events.Orders;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Domain.Entities
 {

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Infrastructure.Persistence;
 using TradingEngine.Domain.Entities;
+using TradingEngine.Application.Interfaces.Orders;
 
 namespace TradingEngine.Infrastructure.Repositories.Orders;
 

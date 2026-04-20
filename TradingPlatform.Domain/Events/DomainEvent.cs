@@ -1,4 +1,4 @@
-namespace TradingPlatform.Domain.Events;
+namespace TradingEngine.Domain.Events;
 
 /// <summary>
 /// Base class for domain events.

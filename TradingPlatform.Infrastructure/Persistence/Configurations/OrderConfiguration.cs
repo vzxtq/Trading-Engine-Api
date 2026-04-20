@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Infrastructure.Persistence.Configurations;
+namespace TradingEngine.Infrastructure.Persistence.Configurations;
 
 public sealed class OrderConfiguration : IEntityTypeConfiguration<OrderDomain>
 {
@@ -25,37 +26,31 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<OrderDomain>
         builder.Property(o => o.Status)
             .IsRequired();
 
-        builder.OwnsOne(o => o.Symbol, sym =>
-        {
-            sym.Property(s => s.Value)
+        builder.Property(o => o.Symbol)
+               .HasConversion(
+                   v => v.Value,
+                   v => new Symbol(v))
                .HasColumnName("Symbol")
                .HasMaxLength(10)
                .IsRequired();
-        });
 
-        builder.OwnsOne(o => o.Price, price =>
-        {
-            price.Property(p => p.Value)
-                 .HasColumnName("Price")
-                 .HasPrecision(18, 8)
-                 .IsRequired();
-        });
+        builder.Property(o => o.Price)
+               .HasConversion(v => v.Value, v => new Price(v))
+               .HasColumnName("Price")
+               .HasPrecision(18, 8)
+               .IsRequired();
 
-        builder.OwnsOne(o => o.Quantity, qty =>
-        {
-            qty.Property(q => q.Value)
+        builder.Property(o => o.Quantity)
+               .HasConversion(v => v.Value, v => new Quantity(v))
                .HasColumnName("Quantity")
                .HasPrecision(18, 8)
                .IsRequired();
-        });
 
-        builder.OwnsOne(o => o.RemainingQuantity, qty =>
-        {
-            qty.Property(q => q.Value)
+        builder.Property(o => o.RemainingQuantity)
+               .HasConversion(v => v.Value, v => new Quantity(v))
                .HasColumnName("RemainingQuantity")
                .HasPrecision(18, 8)
                .IsRequired();
-        });
 
         builder.Property(o => o.CreatedAt).IsRequired();
         builder.Property(o => o.UpdatedAt);

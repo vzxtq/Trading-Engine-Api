@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace TradingPlatform.Application.Common;
+namespace TradingEngine.Application.Common;
 
 /// <summary>
 /// Marker interface for commands without response.

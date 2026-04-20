@@ -1,4 +1,4 @@
-namespace TradingPlatform.Domain.Common;
+namespace TradingEngine.Domain.Common;
 
 public abstract class BaseEntity
 {

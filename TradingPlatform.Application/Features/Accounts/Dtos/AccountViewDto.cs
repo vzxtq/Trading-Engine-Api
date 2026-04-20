@@ -1,4 +1,4 @@
-﻿using TradingPlatform.Domain.ValueObjects;
+﻿using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.Application.Features.Accounts.Dtos
 {

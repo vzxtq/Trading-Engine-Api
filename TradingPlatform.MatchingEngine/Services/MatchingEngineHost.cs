@@ -5,14 +5,15 @@ using Microsoft.Extensions.Options;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
 using TradingEngine.MatchingEngine.Models;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Services;
 
 internal sealed record MatchingEngineShard(
     int Id,
     Channel<MatchingEngineCommand> Channel,
-    MatchingEngineWorker Worker)
+    MatchingEngineWorker Worker,
+    MatchingEngineProcessor Processor)
 {
     public ChannelWriter<MatchingEngineCommand> Writer => Channel.Writer;
 }
@@ -20,7 +21,7 @@ internal sealed record MatchingEngineShard(
 /// <summary>
 /// Orchestrates sharded, per-symbol workers. Symbols are deterministically mapped to shards by hash.
 /// </summary>
-public sealed class MatchingEngineHost : IMatchingEngineQueue, IOrderBookSnapshotProvider
+public sealed class MatchingEngineHost : IMatchingEngineQueue, IOrderBookSnapshotProvider, IAsyncDisposable
 {
     private readonly MatchingEngineShard[] _shards;
     private readonly MatchingEngineOptions _options;
@@ -49,7 +50,7 @@ public sealed class MatchingEngineHost : IMatchingEngineQueue, IOrderBookSnapsho
             var workerLogger = loggerFactory.CreateLogger<MatchingEngineWorker>();
             var worker = new MatchingEngineWorker(processor, dispatcher, timeProvider, channel.Reader, workerLogger);
 
-            _shards[i] = new MatchingEngineShard(i, channel, worker);
+            _shards[i] = new MatchingEngineShard(i, channel, worker, processor);
         }
     }
 
@@ -86,5 +87,13 @@ public sealed class MatchingEngineHost : IMatchingEngineQueue, IOrderBookSnapsho
     {
         var hash = StringComparer.OrdinalIgnoreCase.GetHashCode(symbol);
         return Math.Abs(hash % _shards.Length);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        foreach (var shard in _shards)
+        {
+            await shard.Processor.DisposeAsync();
+        }
     }
 }

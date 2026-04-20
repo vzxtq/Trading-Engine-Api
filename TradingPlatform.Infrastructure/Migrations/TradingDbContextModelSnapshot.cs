@@ -6,10 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TradingEngine.Infrastructure.Persistence;
 
-
 #nullable disable
 
-namespace TradingPlatform.Infrastructure.Migrations
+namespace TradingEngine.Infrastructure.Migrations
 {
     [DbContext(typeof(TradingDbContext))]
     partial class TradingDbContextModelSnapshot : ModelSnapshot
@@ -23,99 +22,282 @@ namespace TradingPlatform.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("TradingPlatform.Infrastructure.Persistence.UserAccount", b =>
+            modelBuilder.Entity("TradingEngine.Domain.Entities.OrderDomain", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("Price");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("Quantity");
+
+                    b.Property<decimal>("RemainingQuantity")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("RemainingQuantity");
+
+                    b.Property<int>("Side")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("Symbol");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Orders");
+
+                    b.HasIndex("UserId", "CreatedAt")
+                        .HasDatabaseName("IX_Orders_User_CreatedAt");
+
+                    b.ToTable("Orders", (string)null);
+                });
+
+            modelBuilder.Entity("TradingPlatform.Domain.Entities.PositionDomain", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("AverageCost")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("Quantity");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("Symbol");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Positions");
+
+                    b.HasIndex("UserId", "Symbol")
+                        .IsUnique()
+                        .HasDatabaseName("UX_Positions_User_Symbol");
+
+                    b.ToTable("Positions", (string)null);
+                });
+
+            modelBuilder.Entity("TradingPlatform.Domain.Entities.TradeDomain", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuyOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuyerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasColumnName("created_at");
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<DateTime>("ExecutedAt")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ExecutedAt");
+
+                    b.Property<decimal>("Price")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("Price");
+
+                    b.Property<decimal>("Quantity")
+                        .HasPrecision(18, 8)
+                        .HasColumnType("decimal(18,8)")
+                        .HasColumnName("Quantity");
+
+                    b.Property<Guid>("SellOrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SellerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Symbol")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("Symbol");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id")
+                        .HasName("PK_Trades");
+
+                    b.HasIndex("ExecutedAt")
+                        .HasDatabaseName("IX_Trades_ExecutedAt");
+
+                    b.ToTable("Trades", (string)null);
+                });
+
+            modelBuilder.Entity("TradingPlatform.Domain.Entities.UserAccountDomain", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedAt")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit")
-                        .HasColumnName("is_active");
+                        .HasColumnName("IsActive");
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("last_login_at");
+                        .HasColumnName("LastLoginAt");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("LastName")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2")
-                        .HasColumnName("updated_at");
+                        .HasColumnName("UpdatedAt");
 
                     b.HasKey("Id")
-                        .HasName("pk_user_accounts");
+                        .HasName("PK_User_Accounts");
 
                     b.HasIndex("Email")
                         .IsUnique()
-                        .HasDatabaseName("ux_user_accounts_email");
+                        .HasDatabaseName("UX_User_Accounts_Email");
 
                     b.HasIndex("IsActive")
-                        .HasDatabaseName("ix_user_accounts_is_active");
+                        .HasDatabaseName("IX_User_Accounts_Is_Active");
 
-                    b.ToTable("user_accounts", (string)null);
+                    b.ToTable("Accounts", (string)null);
                 });
 
-            modelBuilder.Entity("TradingPlatform.Infrastructure.Persistence.UserAccount", b =>
+            modelBuilder.Entity("TradingPlatform.Domain.Entities.UserIdentityDomain", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("SYSUTCDATETIME()");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserIdentities", (string)null);
+                });
+
+            modelBuilder.Entity("TradingPlatform.Domain.Entities.UserAccountDomain", b =>
                 {
                     b.OwnsOne("TradingPlatform.Domain.ValueObjects.Money", "Balance", b1 =>
                         {
-                            b1.Property<Guid>("UserAccountId")
+                            b1.Property<Guid>("UserAccountDomainId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal>("Amount")
                                 .HasPrecision(18, 8)
                                 .HasColumnType("decimal(18,8)")
-                                .HasColumnName("balance_amount");
+                                .HasColumnName("BalanceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
                                 .HasColumnType("nvarchar(3)")
-                                .HasColumnName("balance_currency");
+                                .HasColumnName("BalanceCurrency");
 
-                            b1.HasKey("UserAccountId");
+                            b1.HasKey("UserAccountDomainId");
 
-                            b1.ToTable("user_accounts");
+                            b1.ToTable("Accounts");
 
                             b1.WithOwner()
-                                .HasForeignKey("UserAccountId");
+                                .HasForeignKey("UserAccountDomainId");
                         });
 
                     b.OwnsOne("TradingPlatform.Domain.ValueObjects.Money", "ReservedBalance", b1 =>
                         {
-                            b1.Property<Guid>("UserAccountId")
+                            b1.Property<Guid>("UserAccountDomainId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<decimal>("Amount")
                                 .HasPrecision(18, 8)
                                 .HasColumnType("decimal(18,8)")
-                                .HasColumnName("reserved_balance_amount");
+                                .HasColumnName("ReservedBalanceAmount");
 
                             b1.Property<string>("Currency")
                                 .IsRequired()
                                 .HasMaxLength(3)
                                 .HasColumnType("nvarchar(3)")
-                                .HasColumnName("reserved_balance_currency");
+                                .HasColumnName("ReservedBalanceCurrency");
 
-                            b1.HasKey("UserAccountId");
+                            b1.HasKey("UserAccountDomainId");
 
-                            b1.ToTable("user_accounts");
+                            b1.ToTable("Accounts");
 
                             b1.WithOwner()
-                                .HasForeignKey("UserAccountId");
+                                .HasForeignKey("UserAccountDomainId");
                         });
 
                     b.Navigation("Balance")

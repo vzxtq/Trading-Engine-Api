@@ -1,6 +1,6 @@
-using TradingPlatform.Domain.Entities;
+using TradingEngine.Domain.Entities;
 
-namespace TradingPlatform.Domain.Repositories;
+namespace TradingEngine.Domain.Repositories;
 
 /// <summary>
 /// Repository interface for UserAccount aggregate root.

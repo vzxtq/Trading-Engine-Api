@@ -1,4 +1,4 @@
-using TradingPlatform.Application.Common;
+using TradingEngine.Application.Common;
 
 namespace TradingEngine.Application.Features.Accounts.Commands;
 

@@ -48,7 +48,7 @@ public sealed class MatchingEngineWorker
 
                 default:
                     var engineTimestamp = _timeProvider.GetTimestamp();
-                    var result = _engine.Process(command, engineTimestamp);
+                    var result = await _engine.ProcessAsync(command, engineTimestamp);
                     await _dispatcher.DispatchAsync(result, ct);
                     break;
             }

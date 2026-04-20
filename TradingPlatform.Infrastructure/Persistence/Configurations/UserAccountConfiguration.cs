@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TradingPlatform.Domain.Entities;
+using TradingEngine.Domain.Entities;
 
-namespace TradingPlatform.Infrastructure.Persistence.Configurations;
+namespace TradingEngine.Infrastructure.Persistence.Configurations;
 
 public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountDomain>
 {
@@ -24,9 +24,13 @@ public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountDoma
                .IsRequired()
                .HasMaxLength(200);
 
-        builder.Property(x => x.Name)
+        builder.Property(x => x.FirstName)
                .IsRequired()
-               .HasMaxLength(150);
+               .HasMaxLength(100);
+
+        builder.Property(x => x.LastName)
+               .IsRequired()
+               .HasMaxLength(100);
 
         builder.OwnsOne(x => x.Balance, balance =>
         {

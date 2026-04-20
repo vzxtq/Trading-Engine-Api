@@ -196,3 +196,5 @@ tools/
 *.log
 *.user
 *.vs/
+GEMINI.md
+*.lscache

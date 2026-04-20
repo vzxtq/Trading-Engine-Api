@@ -2,15 +2,20 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TradingEngine.Application.Features.Orders.Commands;
 using TradingEngine.Application.Features.Orders.Queries;
+using TradingEngineApi.Controllers;
 using TradingEngineApi.Extensions;
+using TradingEngine.Application.Interfaces;
 
-namespace TradingEngineApi.Controllers;
+namespace TradingEngine.Api.Controllers;
 
 [Route("api/[controller]")]
 public class OrdersController : ApiController
 {
-    public OrdersController(IMediator mediator) : base(mediator)
+    private readonly IUserResolverService _userResolverService;
+
+    public OrdersController(IMediator mediator, IUserResolverService userResolverService) : base(mediator)
     {
+        _userResolverService = userResolverService;
     }
 
     [HttpPost]
@@ -25,10 +30,12 @@ public class OrdersController : ApiController
     [HttpPost("{id:guid}/cancel")]
     public async Task<IActionResult> CancelOrder(
         Guid id,
-        [FromBody] CancelOrderCommand command,
+        CancelOrderCommand command,
         CancellationToken ct)
     {
         command.OrderId = id;
+        command.UserId = _userResolverService.GetUserId();
+
         var result = await Mediator.Send(command, ct);
         return result.ToActionResult();
     }

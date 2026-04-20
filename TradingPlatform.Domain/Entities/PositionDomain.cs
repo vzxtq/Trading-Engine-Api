@@ -1,7 +1,7 @@
-using TradingPlatform.Domain.Common;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.Common;
+using TradingEngine.Domain.ValueObjects;
 
-namespace TradingPlatform.Domain.Entities;
+namespace TradingEngine.Domain.Entities;
 
 /// <summary>
 /// Represents a user's position in a particular stock symbol.

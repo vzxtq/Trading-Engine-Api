@@ -1,4 +1,4 @@
-namespace TradingPlatform.Domain.ValueObjects;
+namespace TradingEngine.Domain.ValueObjects;
 
 /// <summary>
 /// Represents a quantity of shares.

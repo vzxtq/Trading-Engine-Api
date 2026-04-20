@@ -1,4 +1,4 @@
-namespace TradingPlatform.Application.Common;
+namespace TradingEngine.Application.Common;
 
 /// <summary>
 /// Encapsulates success/failure state and error information.

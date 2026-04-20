@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\TradingPlatform.Application\TradingEngine.Application.csproj" />
     <ProjectReference Include="..\TradingPlatform.Domain\TradingEngine.Domain.csproj" />
+    <ProjectReference Include="..\TradingPlatform.MatchingEngine\TradingEngine.MatchingEngine.csproj" />
   </ItemGroup>
 
 </Project>

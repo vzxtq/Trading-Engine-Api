@@ -1,23 +1,24 @@
+using System.Collections.Concurrent;
 using TradingEngine.MatchingEngine.Commands;
 using TradingEngine.MatchingEngine.Models;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Domain.ValueObjects;
 
 namespace TradingEngine.MatchingEngine.Services;
 
-public sealed class MatchingEngineProcessor
+public sealed class MatchingEngineProcessor : IAsyncDisposable
 {
-    private readonly Dictionary<string, SymbolEngine> _engines = new();
+    private readonly ConcurrentDictionary<string, SymbolEngineProcessor> _engines = new();
 
     private static long _sequenceId;
 
-    public ExecutionResult Process(MatchingEngineCommand command, long engineTimestamp)
+    public async ValueTask<ExecutionResult> ProcessAsync(MatchingEngineCommand command, long engineTimestamp)
     {
         ArgumentNullException.ThrowIfNull(command);
         ArgumentNullException.ThrowIfNull(command.Symbol);
 
         var sequenceId = Interlocked.Increment(ref _sequenceId);
-        var (engine, _) = GetOrCreateEngine(command.Symbol);
-        return engine.Process(command, sequenceId, engineTimestamp);
+        var engine = GetOrCreateEngine(command.Symbol);
+        return await engine.EnqueueAsync(command, sequenceId, engineTimestamp);
     }
 
     public OrderBookSnapshot GetSnapshot(Symbol symbol)
@@ -31,15 +32,18 @@ public sealed class MatchingEngineProcessor
         return engine.Snapshot();
     }
 
-    private (SymbolEngine Engine, bool IsNew) GetOrCreateEngine(Symbol symbol)
+    private SymbolEngineProcessor GetOrCreateEngine(Symbol symbol)
     {
         var symbolKey = symbol.Value;
+        return _engines.GetOrAdd(symbolKey, key => new SymbolEngineProcessor(key));
+    }
 
-        if (_engines.TryGetValue(symbolKey, out var existing))
-            return (existing, false);
-
-        var created = new SymbolEngine(symbolKey);
-        _engines[symbolKey] = created;
-        return (created, true);
+    public async ValueTask DisposeAsync()
+    {
+        foreach (var engine in _engines.Values)
+        {
+            await engine.DisposeAsync();
+        }
+        _engines.Clear();
     }
 }

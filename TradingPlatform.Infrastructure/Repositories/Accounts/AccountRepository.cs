@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TradingEngine.Application.Interfaces.Accounts;
 using TradingEngine.Infrastructure.Persistence;
-using TradingPlatform.Domain.Entities;
+using TradingEngine.Domain.Entities;
 
 namespace TradingEngine.Infrastructure.Repositories.Accounts;
 

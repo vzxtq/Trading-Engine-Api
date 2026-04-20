@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TradingEngineApi.Common;
 using TradingEngineApi.Extensions;
 using TradingEngine.Application.Features.Accounts.Commands;
+using TradingEngine.Application.Features.Accounts.Commands;
 using TradingEngine.Application.Features.Accounts.Queries;
 
 namespace TradingEngineApi.Controllers;
@@ -18,10 +19,15 @@ public class AccountsController : ApiController
     {
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAccount(
-        CreateAccountCommand command,
-        CancellationToken ct)
+    [HttpPost("login")]
+    public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken ct)
+    {
+        var result = await Mediator.Send(command, ct);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("register")]
+    public async Task<IActionResult> Register([FromBody] RegisterUserCommand command, CancellationToken ct)
     {
         var result = await Mediator.Send(command, ct);
         return result.ToActionResult();

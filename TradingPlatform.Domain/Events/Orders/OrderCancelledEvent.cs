@@ -1,6 +1,6 @@
-﻿using TradingPlatform.Domain.Common;
+﻿using TradingEngine.Domain.Common;
 
-namespace TradingPlatform.Domain.Events.Orders;
+namespace TradingEngine.Domain.Events.Orders;
 
 /// <summary>
 /// Raised when an order is cancelled.

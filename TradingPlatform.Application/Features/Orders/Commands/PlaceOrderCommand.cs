@@ -1,12 +1,15 @@
 using TradingEngine.Application.Features.Orders.Repositories;
 using TradingEngine.Application.Interfaces.Orders;
+using TradingEngine.Application.Interfaces.Accounts;
 using TradingEngine.Domain.Entities;
 using TradingEngine.Domain.Enums;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
-using TradingPlatform.Application.Common;
-using TradingPlatform.Application.Features.Orders.Dtos;
-using TradingPlatform.Domain.ValueObjects;
+using TradingEngine.Application.Common;
+using TradingEngine.Application.Features.Orders.Dtos;
+using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.ValueObjects;
+using TradingEngine.Application.Interfaces;
 
 namespace TradingEngine.Application.Features.Orders.Commands;
 
@@ -15,7 +18,6 @@ namespace TradingEngine.Application.Features.Orders.Commands;
 /// </summary>
 public class PlaceOrderCommand : ICommand<Result<PlaceOrderResponseDto>>
 {
-    public Guid UserId { get; set; }
     public string Symbol { get; set; } = string.Empty;
     public long Price { get; set; }
     public long Quantity { get; set; }
@@ -26,19 +28,26 @@ public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand
 {
     private readonly IMatchingEngineQueue _queue;
     private readonly IOrderRepository _orderRepository;
+    private readonly IAccountRepository _accountRepository;
+    private readonly IUserResolverService _userResolver;
 
     public PlaceOrderCommandHandler(
         IMatchingEngineQueue queue,
-        IOrderRepository orderRepository)
+        IOrderRepository orderRepository,
+        IAccountRepository accountRepository,
+        IUserResolverService userResolver)
     {
         _queue = queue;
         _orderRepository = orderRepository;
+        _accountRepository = accountRepository;
+        _userResolver = userResolver;
     }
 
     public async Task<Result<PlaceOrderResponseDto>> Handle(
         PlaceOrderCommand request,
         CancellationToken cancellationToken)
     {
+        var userId = _userResolver.GetUserId();
         var orderId = Guid.NewGuid();
 
         try
@@ -47,8 +56,21 @@ public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand
             var price = new Price(request.Price);
             var quantity = new Quantity(request.Quantity);
 
+            var account = await _accountRepository.GetByIdAsync(userId, cancellationToken);
+            if (account is null)
+                return Result<PlaceOrderResponseDto>.Failure("Account not found");
+
+            // Reserve funds for buy orders up front.
+            if (request.Side == OrderSide.Buy)
+            {
+                var notional = price.Value * quantity.Value;
+                var money = new Money(notional, account.Balance.Currency);
+                account.ReserveFunds(money);
+                await _accountRepository.UpdateAsync(account, cancellationToken);
+            }
+
             var order = OrderDomain.Create(
-                request.UserId,
+                userId,
                 symbol,
                 price,
                 quantity,
@@ -59,7 +81,7 @@ public sealed class PlaceOrderCommandHandler : ICommandHandler<PlaceOrderCommand
             var command = new AddOrderCommand
             {
                 OrderId = order.Id,
-                UserId = request.UserId,
+                UserId = userId,
                 Symbol = symbol,
                 Price = request.Price,
                 Quantity = request.Quantity,

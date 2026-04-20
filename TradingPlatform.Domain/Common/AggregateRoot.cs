@@ -1,6 +1,6 @@
-using TradingPlatform.Domain.Events;
+using TradingEngine.Domain.Events;
 
-namespace TradingPlatform.Domain.Common;
+namespace TradingEngine.Domain.Common;
 
 /// <summary>
 /// Base class for aggregate roots.

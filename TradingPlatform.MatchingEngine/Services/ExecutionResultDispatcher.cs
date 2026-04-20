@@ -1,25 +1,29 @@
+using Microsoft.Extensions.DependencyInjection;
 using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Models;
 
 namespace TradingEngine.MatchingEngine.Services
 {
+    /// <summary>
+    /// Resolves scoped handlers per dispatch to avoid lifetime mismatches (singleton host -> scoped handlers with DbContext).
+    /// </summary>
     public sealed class ExecutionResultDispatcher : IExecutionResultDispatcher
     {
-        private readonly IEnumerable<IExecutionResultHandler> _handlers;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public ExecutionResultDispatcher(IEnumerable<IExecutionResultHandler> handlers)
+        public ExecutionResultDispatcher(IServiceScopeFactory scopeFactory)
         {
-            _handlers = handlers ?? throw new ArgumentNullException(nameof(handlers));
+            _scopeFactory = scopeFactory ?? throw new ArgumentNullException(nameof(scopeFactory));
         }
 
         public async Task DispatchAsync(ExecutionResult result, CancellationToken cancellationToken)
         {
-            if (result == null)
-            {
-                throw new ArgumentNullException(nameof(result));
-            }
+            ArgumentNullException.ThrowIfNull(result);
 
-            foreach (var handler in _handlers)
+            await using var scope = _scopeFactory.CreateAsyncScope();
+            var handlers = scope.ServiceProvider.GetServices<IExecutionResultHandler>();
+
+            foreach (var handler in handlers)
             {
                 await handler.HandleAsync(result, cancellationToken);
             }

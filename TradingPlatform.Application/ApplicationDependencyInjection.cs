@@ -12,7 +12,6 @@ public static class ApplicationDependencyInjection
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ApplicationDependencyInjection).Assembly));
 
         services.AddMatchingEngine()
-                .AddHandler<PersistenceExecutionResultHandler>()
                 .AddHandler<MarketDataExecutionResultHandler>();
 
         return services;

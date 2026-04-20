@@ -1,6 +1,6 @@
 using TradingEngine.Domain.Enums;
 
-namespace TradingPlatform.Application.Features.Orders.Dtos;
+namespace TradingEngine.Application.Features.Orders.Dtos;
 
 public class PlaceOrderResponseDto
 {
