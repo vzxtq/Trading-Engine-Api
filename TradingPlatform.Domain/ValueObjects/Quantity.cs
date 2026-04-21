@@ -12,10 +12,10 @@ public class Quantity : IEquatable<Quantity>, IComparable<Quantity>
 
     public Quantity(decimal value)
     {
-        if (value <= 0)
-            throw new ArgumentException("Quantity must be greater than zero", nameof(value));
+        if (value < 0)
+            throw new ArgumentException("Quantity cannot be negative", nameof(value));
 
-   Value = value;
+        Value = value;
     }
 
     public Quantity Add(Quantity other) => new(Value + other.Value);

@@ -146,12 +146,20 @@ appsettings.*.json
 
 # User-specific configuration
 launchSettings.json
+appsettings.local.json
+appsettings.Development.json
 
-# SQL Server files
-App_Data/
-*.mdf
-*.ldf
-*.ndf
+# Local user-specific VS settings
+.localconfig
+*.user
+*.userosscache
+*.suo
+
+# Project specific
+TradingPlatform.IntegrationTests/bin/
+TradingPlatform.IntegrationTests/obj/
+TestResults/
+
 
 # IIS
 bin/

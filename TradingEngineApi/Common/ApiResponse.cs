@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TradingEngineApi.Common;
 
 /// <summary>
@@ -12,7 +14,10 @@ public sealed class ApiResponse<T>
     public string Message { get; init; } = string.Empty;
     public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 
-    private ApiResponse(
+    public ApiResponse() { }
+
+    [JsonConstructor]
+    public ApiResponse(
         bool success,
         T? data,
         string message,
@@ -59,7 +64,10 @@ public sealed class ApiResponse
 
     public DateTime Timestamp { get; init; } = DateTime.UtcNow;
 
-    private ApiResponse(
+    public ApiResponse() { }
+
+    [JsonConstructor]
+    public ApiResponse(
         bool success,
         string message,
         IReadOnlyList<string> errors)

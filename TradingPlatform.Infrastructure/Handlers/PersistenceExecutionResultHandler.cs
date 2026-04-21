@@ -61,13 +61,13 @@ public sealed class PersistenceExecutionResultHandler : IExecutionResultHandler
                 .Where(a => userIds.Contains(a.Id))
                 .ToDictionaryAsync(a => a.Id, cancellationToken);
 
-            var symbols = orders.Values.Select(o => o.Symbol.Value).Distinct().ToList();
+            var symbols = orders.Values.Select(o => o.Symbol).Distinct().ToList();
             var positions = await _dbContext.Positions
-                .Where(p => userIds.Contains(p.UserId) && symbols.Contains(p.Symbol.Value))
+                .Where(p => userIds.Contains(p.UserId) && symbols.Contains(p.Symbol))
                 .ToListAsync(cancellationToken);
 
             PositionDomain? FindPosition(Guid userId, Symbol symbol) =>
-                positions.FirstOrDefault(p => p.UserId == userId && p.Symbol.Value == symbol.Value);
+                positions.FirstOrDefault(p => p.UserId == userId && p.Symbol == symbol);
 
             // Trades: move cash and update positions.
             foreach (var trade in accepted.Trades)
