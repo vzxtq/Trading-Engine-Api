@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.Enums;
 
 namespace TradingEngine.Infrastructure.Persistence.Configurations;
 
@@ -39,7 +40,7 @@ public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountDoma
                    .HasPrecision(18, 8);
             balance.Property(m => m.Currency)
                    .HasColumnName("BalanceCurrency")
-                   .HasMaxLength(3);
+                   .HasConversion<string>();
         });
 
         builder.OwnsOne(x => x.ReservedBalance, reserved =>
@@ -49,7 +50,7 @@ public class UserAccountConfiguration : IEntityTypeConfiguration<UserAccountDoma
                     .HasPrecision(18, 8);
             reserved.Property(m => m.Currency)
                    .HasColumnName("ReservedBalanceCurrency")
-                   .HasMaxLength(3);
+                   .HasConversion<string>();
         });
 
         builder.Property(x => x.LastLoginAt)

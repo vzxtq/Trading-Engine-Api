@@ -7,7 +7,6 @@ using TradingEngine.MatchingEngine.Abstractions;
 using TradingEngine.MatchingEngine.Commands;
 using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Orders.Dtos;
-using TradingEngine.Domain.Entities;
 using TradingEngine.Domain.ValueObjects;
 using TradingEngine.Application.Interfaces;
 

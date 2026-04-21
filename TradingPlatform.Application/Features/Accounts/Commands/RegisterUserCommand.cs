@@ -2,6 +2,7 @@ using TradingEngine.Application.Common;
 using TradingEngine.Application.Features.Accounts.Dtos;
 using TradingEngine.Application.Interfaces.Accounts;
 using TradingEngine.Domain.Entities;
+using TradingEngine.Domain.Enums;
 using TradingEngine.Domain.Interfaces;
 using TradingEngine.Domain.ValueObjects;
 
@@ -12,8 +13,8 @@ public sealed record RegisterUserCommand(
     string Password,
     string FirstName,
     string LastName,
-    decimal InitialBalance, // for now, in the future should be removed
-    string Currency) : ICommand<Result<LoginResponseDto>>;
+    decimal InitialBalance,
+    Currency Currency) : ICommand<Result<LoginResponseDto>>;
 
 public sealed class RegisterUserCommandHandler : ICommandHandler<RegisterUserCommand, Result<LoginResponseDto>>
 {

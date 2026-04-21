@@ -21,10 +21,12 @@ public sealed class OrderConfiguration : IEntityTypeConfiguration<OrderDomain>
             .IsRequired();
 
         builder.Property(o => o.Side)
-            .IsRequired();
+            .IsRequired()
+            .HasConversion<string>();
 
         builder.Property(o => o.Status)
-            .IsRequired();
+            .IsRequired()
+            .HasConversion<string>();
 
         builder.Property(o => o.Symbol)
                .HasConversion(

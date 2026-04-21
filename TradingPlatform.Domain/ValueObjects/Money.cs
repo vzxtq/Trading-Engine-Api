@@ -1,3 +1,5 @@
+using TradingEngine.Domain.Enums;
+
 namespace TradingEngine.Domain.ValueObjects;
 
 /// <summary>
@@ -8,30 +10,27 @@ public sealed class Money : IEquatable<Money>
 {
     public decimal Amount { get; }
 
-    public string Currency { get; }
+    public Currency Currency { get; }
 
     public Money()
     {
-        Currency = "USD";
+        Currency = Currency.USD;
     }
 
-    public Money(decimal amount, string currency = "USD")
+    public Money(decimal amount, Currency currency = Currency.USD)
     {
         if (amount < 0)
             throw new ArgumentException("Amount cannot be negative.", nameof(amount));
 
-        if (string.IsNullOrWhiteSpace(currency))
-            throw new ArgumentException("Currency cannot be empty.", nameof(currency));
-
         Amount = amount;
-        Currency = currency.ToUpperInvariant();
+        Currency = currency;
     }
 
-    public static Money Zero(string currency = "USD") => new(0, currency);
+    public static Money Zero(Currency currency = Currency.USD) => new(0, currency);
 
     private static void EnsureSameCurrency(Money a, Money b)
     {
-        if (!string.Equals(a.Currency, b.Currency, StringComparison.Ordinal))
+        if (a.Currency != b.Currency)
             throw new InvalidOperationException(
                 $"Currency mismatch: {a.Currency} vs {b.Currency}");
     }
@@ -78,7 +77,7 @@ public sealed class Money : IEquatable<Money>
             return false;
 
         return Amount == other.Amount &&
-               string.Equals(Currency, other.Currency, StringComparison.Ordinal);
+               Currency == other.Currency;
     }
 
     public override bool Equals(object? obj) => Equals(obj as Money);
