@@ -17,3 +17,5 @@ public class DepositResponse
     public decimal NewBalance { get; set; }
     public bool Success { get; set; }
 }
+
+//should be implemented in the nearest future
